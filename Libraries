@@ -1,0 +1,75 @@
+1. javax.swing.*
+
+Purpose: This package provides classes for creating the graphical user interface (GUI) in Java. It includes components like buttons, text fields, labels, panels, and frames, which are used to build desktop applications.
+Common Classes Used in the Code:
+JFrame: Represents the main window where components like buttons, text fields, and panels are added.
+JTextField: A text box where the user can input text (used here for the directory path and file pattern).
+JTextArea: A multi-line text area for displaying results or logs (in this case, used to show the search results).
+JButton: Represents a button that users can click to trigger actions (like the "Search" and "Cancel" buttons).
+JScrollPane: A scrollable container used to wrap components that may have more content than fits on the screen (in this case, it wraps the JTextArea).
+JLabel: Displays static text (used here to label the input fields like "Directory" and "File Pattern").
+SwingUtilities: A utility class for managing GUI-related tasks safely on the Event Dispatch Thread (EDT). It ensures thread safety when modifying the GUI from a non-GUI thread, such as during the file search task.
+
+2. java.awt.*
+Purpose: This package provides classes for building user interfaces and handling user interactions (e.g., layouts and graphics). It is the core package of Java's Abstract Window Toolkit (AWT), which is used by Swing for more detailed control over the GUI layout.
+Common Classes Used in the Code:
+FlowLayout: A layout manager that arranges components in a directional flow, similar to how text flows in a document (from left to right, and top to bottom).
+BorderLayout: A layout manager that arranges components into five regions: North, South, East, West, and Center. In the code, it's used to place components like the input fields at the top and the results area in the center.
+
+3. java.awt.event.*
+Purpose: This package contains classes and interfaces for event handling, enabling the application to respond to user actions like button clicks, keystrokes, or window events.
+Common Classes Used in the Code:
+ActionEvent: Represents an action event (e.g., a button click). It's passed to the actionPerformed method when the user interacts with GUI components like buttons.
+ActionListener: An interface that listens for actions (e.g., button clicks) and defines the actionPerformed method, which is executed when the event occurs. In this code, two ActionListeners are defined for the search and cancel buttons.
+
+4. java.io.File
+Purpose: The java.io.File class represents file and directory pathnames. It provides methods to create, delete, and query file properties (such as file names, types, and directory structure).
+Common Methods Used in the Code:
+exists(): Checks if a file or directory exists.
+isDirectory(): Determines whether the file is a directory.
+listFiles(): Returns an array of File objects representing the files and subdirectories in a directory.
+getName(): Gets the name of the file or directory.
+getAbsolutePath(): Returns the absolute path of the file or directory as a string.
+In the code, the File class is used to check if the directory exists, list the files in a directory, and match file names against the specified pattern.
+
+5. java.util.ArrayList
+Purpose: This is a part of the Java Collections Framework and is used to create dynamic arrays that can grow or shrink as needed. It provides methods to manipulate the size of the list, and is commonly used for storing elements in order.
+Usage in the Code:
+The ArrayList class is used to store the list of matching files that meet the search criteria (file name pattern). The ArrayList grows dynamically as files are found during the search.
+
+6. java.util.List
+Purpose: This is an interface that represents an ordered collection of elements. It defines methods to manipulate elements in the list, such as adding, removing, and retrieving elements.
+Usage in the Code:
+List<File> is the type used to hold and process the list of files that match the given pattern. The actual implementation used is ArrayList, which is a concrete class that implements List.
+
+7. java.util.concurrent.ExecutorService
+Purpose: This interface provides a framework for managing a pool of threads. It allows you to execute tasks concurrently by submitting them to a thread pool, thus avoiding the overhead of creating and managing individual threads manually.
+Common Methods Used in the Code:
+submit(Runnable task): Submits a task to the executor service for asynchronous execution. The task is defined by a Runnable object (like FileSearchTask in this case).
+shutdownNow(): Shuts down the executor service and attempts to stop all actively executing tasks.
+Usage in the Code:
+The ExecutorService is used to create a fixed-size thread pool with 5 threads. This allows the program to perform file searches concurrently, improving performance when searching through large directories. By using a thread pool, multiple searches can be done simultaneously without needing to manage the threads manually.
+
+8. java.util.concurrent.Executors
+Purpose: The Executors class provides factory methods for creating different types of thread pools, such as single-threaded executors, cached thread pools, and fixed-size thread pools.
+Usage in the Code:
+Executors.newFixedThreadPool(5) is used to create a thread pool with 5 threads. This allows up to 5 file search tasks to run in parallel, which improves performance when searching large file systems.
+
+9. java.lang.Runnable
+Purpose: This is a functional interface that represents a task that can be executed by a thread. It contains a single method, run(), which defines the code that will be executed when the task runs.
+Usage in the Code:
+The FileSearchTask class implements the Runnable interface. This allows FileSearchTask objects to be submitted to the ExecutorService for execution in a separate thread. The run() method in FileSearchTask contains the logic for recursively searching for files.
+
+10. javax.swing.SwingUtilities
+Purpose: This class provides utility methods for performing tasks on the Event Dispatch Thread (EDT), which is the thread responsible for managing GUI components in Swing applications. It ensures thread safety when updating the GUI from a background thread.
+Usage in the Code:
+SwingUtilities.invokeLater() is used to update the GUI (specifically the JTextArea where search results are displayed) safely from a background thread. Since file searches are done on separate threads, this ensures that the GUI is updated on the correct thread without causing concurrency issues.
+
+Summary of Library Usage:
+Swing (javax.swing.*): Used to create the graphical user interface (GUI), including windows, buttons, text fields, and text areas.
+AWT (java.awt.* and java.awt.event.*): Provides layout management (FlowLayout, BorderLayout) and handles user input events (like button clicks).
+File Management (java.io.File): Manages file and directory paths, checks if directories exist, and lists files.
+Collections (java.util.ArrayList and java.util.List): Used to dynamically store and manage lists of files that match the search pattern.
+Concurrency (java.util.concurrent.ExecutorService and java.util.concurrent.Executors): Manages multithreading with a fixed-size thread pool for running multiple file searches concurrently.
+Runnable: Defines tasks (FileSearchTask) that can be executed in parallel threads.
+SwingUtilities: Ensures that updates to the GUI happen on the correct thread, maintaining thread safety.
